@@ -1,0 +1,44 @@
+TÀI LIỆU CASE STUDY: HỆ THỐNG MÔ PHỎNG LỊCH SỬ TRÌNH DUYỆT (BROWSER HISTORY)
+1. Đặt vấn đề & Bối cảnh thực tế (Problem Context)
+Trong các trình duyệt hiện đại như Google Chrome, Microsoft Edge, hay Mozilla Firefox, tính năng điều hướng (Navigation) bao gồm hai nút bấm kinh điển: Backward (Quay lại) và Forward (Tiến về trước), kết hợp với trang quản lý History (Lịch sử).
+Tuy giao diện người dùng (UI) rất đơn giản, nhưng hệ thống quản lý dữ liệu ngầm bên dưới phải giải quyết một bài toán phức tạp về luồng dữ liệu (Data Workflow):
+•	Ghi lại các trang web đã đi qua theo đúng trình tự thời gian.
+•	Cho phép người dùng dịch chuyển tới - lui một cách mượt mà mà không làm mất liên kết giữa các trang.
+•	Đặc biệt: Xử lý kịch bản "Rẽ nhánh lịch sử" (Branching) – khi người dùng quay lại một trang cũ trong quá khứ, sau đó không bấm tiến lên nữa mà lại truy cập vào một trang hoàn toàn mới. Lúc này, các trang nằm ở phía trước (nhánh tương lai cũ) phải bị hủy bỏ để nhường chỗ cho một nhánh lịch sử mới.
+2. Các yêu cầu kỹ thuật & Nghiệp vụ (System Requirements)
+Yêu cầu chức năng (Functional Requirements)
+•	FR1 - Khởi tạo (Init): Trình duyệt mở ra ở trạng thái trống (hoặc trang mặc định default page).
+•	FR2 - Truy cập trang mới (Visit): Người dùng nhập một URL mới, hệ thống ghi lại URL, tiêu đề (Title) và thời gian truy cập (Timestamp).
+•	FR3 - Quay lại (Backward): Di chuyển về trang web liền trước trang hiện tại. Nếu đang ở trang đầu tiên trong phiên làm việc, nút Backward sẽ bị vô hiệu hóa (disabled).
+•	FR4 - Tiến lên (Forward): Di chuyển về trang web liền sau trang hiện tại. Nếu đang ở trang mới nhất, nút Forward sẽ bị vô hiệu hóa.
+•	FR5 - Hiển thị lịch sử (Show History): Xuất ra danh sách toàn bộ các trang đã đi qua, đánh dấu rõ ràng vị trí mà người dùng đang đứng ở hiện tại.
+Yêu cầu phi chức năng (Non-Functional Requirements)
+•	Hiệu năng (Performance): Thao tác dịch chuyển điều hướng (Back/Forward) phải diễn ra tức thời với độ phức tạp thời gian là $O(1)$.
+•	Quản lý bộ nhớ (Memory Management): Khi xảy ra hiện tượng rẽ nhánh, hệ thống phải giải phóng (hoặc ngắt kết nối hoàn toàn) các Node không còn sử dụng để tránh rò rỉ bộ nhớ (Memory Leak).
+3. Kịch bản Case Study chi tiết (Walkthrough Scenario)
+Để minh họa cách hệ thống vận hành và xử lý dữ liệu, nhóm xây dựng một kịch bản trải nghiệm gồm 5 bước của người dùng:
+Bước	Hành động của người dùng	Trạng thái hiển thị trên màn hình	Cấu trúc dữ liệu ngầm xử lý
+1	Truy cập google.com (Trang chủ)	"Bạn đang ở: Google"	Khởi tạo Node đầu tiên. head, tail, current đều trỏ vào Node này.
+2	Truy cập tiếp youtube.com	"Bạn đang ở: YouTube"	Tạo Node mới. Nối next của Google sang YouTube, nối prev của YouTube về Google. current và tail chuyển sang YouTube.
+3	Truy cập tiếp github.com	"Bạn đang ở: GitHub"	Chuỗi liên kết bây giờ là: Google <=> YouTube <=> GitHub. current và tail dừng ở GitHub.
+4	Người dùng bấm nút Backward 2 lần liên tiếp	"Bạn đang ở: Google"	current dịch chuyển lùi liên tiếp theo các con trỏ prev. Lúc này: head và current ở Google, nhưng tail vẫn ở GitHub.
+5	Từ google.com, người dùng truy cập trang mới: facebook.com (Kịch bản Rẽ nhánh)	"Bạn đang ở: Facebook"	Hệ thống phát hiện current (Google) không bằng tail (GitHub). Con trỏ next của Google bị bẻ gãy để nối vào Facebook mới tạo. Hai Node YouTube và GitHub bị cô lập hoàn toàn và xóa bỏ. tail và current cập nhật về Facebook.
+4. Phân tích giải pháp & Human Delta (Lý do chọn cấu trúc dữ liệu)
+Trong giai đoạn thiết kế hệ thống, nhóm đã tiến hành phân tích, so sánh cấu trúc dữ liệu Doubly Linked List (Danh sách liên kết đôi) với hai cấu trúc phổ biến khác là Array (Mảng/ArrayList) và Stack (Ngăn xếp) để tìm ra giải pháp tối ưu nhất cho bài toán Browser History.
+4.1. Tại sao không sử dụng Mảng - Array/ArrayList ?
+Mặc dù mảng rất mạnh trong việc truy cập ngẫu nhiên phần tử thông qua chỉ số (Index) với độ phức tạp thấp, nhưng nó lại bộc lộ những hạn chế chí mạng trong bài toán này:
+•	Chi phí rẽ nhánh lịch sử rất cao: Tại Bước 5 của Case Study, khi người dùng đang ở giữa lịch sử và truy cập một trang hoàn toàn mới, hệ thống bắt buộc phải xóa bỏ toàn bộ các phần tử thuộc nhánh "tương lai cũ" nằm phía sau. Đối với mảng, việc xóa hàng loạt phần tử hoặc chèn phần tử mới vào giữa sẽ yêu cầu dịch chuyển các ô nhớ vật lý, dẫn đến tốn nhiều chi phí thời gian. Nếu lịch sử duyệt web lớn, thao tác này sẽ gây giật lag trình duyệt.
+•	Lãng phí hoặc thiếu hụt bộ nhớ: Mảng tĩnh đòi hỏi cấp phát cố định (gây lãng phí nếu không dùng hết), còn mảng động (ArrayList) lại mất chi phí cấu hình lại kích thước (Resize) và sao chép dữ liệu khi bộ nhớ bị đầy.
+4.2. Tại sao không sử dụng Ngăn xếp - Stack ?
+AI thường gợi ý giải pháp dùng 2 Stack (một Back_Stack chứa lịch sử phía trước và một Forward_Stack chứa lịch sử phía sau) vì cơ chế LIFO (Vào sau ra trước) rất hợp với thao tác Back/Forward. Tuy nhiên, nhóm đã phản biện và từ chối giải pháp này vì:
+•	Khó khăn khi triển khai tính năng Show History: Một yêu cầu bắt buộc của trình duyệt là hiển thị danh sách toàn bộ các trang đã đi qua theo đúng thứ tự thời gian tuyến tính. Stack chỉ cho phép truy cập phần tử ở đỉnh (Top). Để in toàn bộ lịch sử, hệ thống sẽ phải pop() lần lượt tất cả phần tử ra một cấu trúc tạm thời rồi nạp ngược trở lại. Thao tác này cực kỳ cồng kềnh, phức tạp và dễ gây lỗi hệ thống.
+•	Quản lý dữ liệu phân tán: Việc phải duy trì, đồng bộ và chuyển dịch dữ liệu liên tục giữa 2 đối tượng Stack riêng biệt làm tăng rủi ro sai sót logic khi code.
+4.3. Ưu thế tuyệt đối của Danh sách liên kết đôi - Doubly Linked List
+Bằng việc tự định nghĩa một cấu trúc Doubly Linked List, nhóm đã giải quyết trọn vẹn và tối ưu toàn bộ các điểm nghẽn kỹ thuật trên:
+•	Tối ưu hóa điều hướng: Nhờ có hai con trỏ prev (Backward) và next (Forward) tích hợp ngay trong mỗi Node, việc di chuyển tiến - lùi của con trỏ current chỉ đơn giản là thay đổi tham chiếu địa chỉ: current = current.prev hoặc current = current.next. Thao tác này diễn ra ngay lập tức với độ phức tạp thời gian được tối ưu tuyệt đối.
+•	Xử lý rẽ nhánh gãy gọn: Khi người dùng visit trang mới từ giữa lịch sử, dev không cần tốn công xóa từng ô nhớ như mảng. Hệ thống chỉ cần cô lập nhánh cũ bằng cách bẻ gãy liên kết: current.next = newNode và newNode.prev = current. Các Node cũ phía sau không còn con trỏ quản lý sẽ tự động được trình thu gom rác (Garbage Collector) giải phóng. Thao tác này chỉ mất rất ít chi phí thời gian.
+•	Duyệt in lịch sử trực quan: Vì đây là một chuỗi tuyến tính liên tục từ head đến tail, tính năng Show History được thực hiện cực kỳ đơn giản bằng một vòng lặp duyệt từ đầu đến cuối danh sách mà không làm biến đổi hay ảnh hưởng đến trạng thái hiện tại của trình duyệt.
+👉 Kết luận của nhóm: Quyết định chọn Doubly Linked List thay vì Array hay Stack thể hiện tư duy làm chủ cấu trúc dữ liệu của con người, không rập khuôn theo các đoạn code mẫu bề nổi của AI, đảm bảo hệ thống đạt hiệu năng cao nhất cả về tốc độ xử lý lẫn quản lý tài nguyên bộ nhớ.
+ 
+
+
