@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1f2937" />
+    </marker>
+    <style>
+      .title { font: 700 36px 'Segoe UI', Arial, sans-serif; fill: #111827; }
+      .label { font: 700 24px 'Segoe UI', Arial, sans-serif; fill: #111827; }
+      .text { font: 18px 'Consolas', 'Courier New', monospace; fill: #1f2937; }
+      .small { font: 17px 'Segoe UI', Arial, sans-serif; fill: #374151; }
+      .note { font: 16px 'Segoe UI', Arial, sans-serif; fill: #0f172a; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1600" height="1200" fill="#f8fafc"/>
+  <text x="800" y="70" text-anchor="middle" class="title">Browser History - Class Diagram (Updated per Member 2 Spec)</text>
+
+  <rect x="90" y="140" width="690" height="900" rx="14" fill="#ffffff" stroke="#334155" stroke-width="2.2"/>
+  <line x1="90" y1="210" x2="780" y2="210" stroke="#334155" stroke-width="2.2"/>
+  <line x1="90" y1="470" x2="780" y2="470" stroke="#334155" stroke-width="2.2"/>
+  <text x="435" y="183" text-anchor="middle" class="label">Node</text>
+
+  <text x="120" y="255" class="text">- url: String (private)</text>
+  <text x="120" y="292" class="text">- title: String (private)</text>
+  <text x="120" y="329" class="text">- timestamp: LocalDateTime (private)</text>
+  <text x="120" y="366" class="text">~ prev: Node (package)</text>
+  <text x="120" y="403" class="text">~ next: Node (package)</text>
+
+  <text x="120" y="515" class="text">+ Node(url: String, title: String, timestamp: LocalDateTime)</text>
+  <text x="120" y="552" class="text">+ Node(url: String, title: String)</text>
+  <text x="120" y="589" class="text">+ getUrl(): String</text>
+  <text x="120" y="626" class="text">+ setUrl(url: String): void</text>
+  <text x="120" y="663" class="text">+ getTitle(): String</text>
+  <text x="120" y="700" class="text">+ setTitle(title: String): void</text>
+  <text x="120" y="737" class="text">+ getTimestamp(): LocalDateTime</text>
+  <text x="120" y="774" class="text">+ setTimestamp(ts: LocalDateTime): void</text>
+  <text x="120" y="811" class="text">+ getFormattedTimestamp(): String</text>
+  <text x="120" y="848" class="text">+ toString(): String</text>
+
+  <rect x="900" y="140" width="630" height="900" rx="14" fill="#ffffff" stroke="#334155" stroke-width="2.2"/>
+  <line x1="900" y1="210" x2="1530" y2="210" stroke="#334155" stroke-width="2.2"/>
+  <line x1="900" y1="430" x2="1530" y2="430" stroke="#334155" stroke-width="2.2"/>
+  <text x="1215" y="183" text-anchor="middle" class="label">BrowserHistory</text>
+
+  <text x="930" y="255" class="text">- head: Node (private)</text>
+  <text x="930" y="292" class="text">- tail: Node (private)</text>
+  <text x="930" y="329" class="text">- current: Node (private)</text>
+  <text x="930" y="366" class="text">- size: int (private)</text>
+
+  <text x="930" y="475" class="text">+ BrowserHistory()</text>
+  <text x="930" y="512" class="text">+ visit(url: String, title: String): void</text>
+  <text x="930" y="549" class="text">+ back(): Node</text>
+  <text x="930" y="586" class="text">+ forward(): Node</text>
+  <text x="930" y="623" class="text">+ showHistory(): void</text>
+  <text x="930" y="660" class="text">+ canGoBack(): boolean</text>
+  <text x="930" y="697" class="text">+ canGoForward(): boolean</text>
+  <text x="930" y="734" class="text">+ getCurrentPage(): Node</text>
+  <text x="930" y="771" class="text">+ getSize(): int</text>
+  <text x="930" y="808" class="text">+ isEmpty(): boolean</text>
+  <text x="930" y="845" class="text">- truncateForward(): void</text>
+
+  <line x1="780" y1="330" x2="900" y2="330" stroke="#1f2937" stroke-width="2.6" marker-end="url(#arrow)"/>
+  <text x="840" y="312" text-anchor="middle" class="small">uses</text>
+
+  <path d="M245 1040 C245 1120, 625 1120, 625 1040" fill="none" stroke="#1f2937" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="435" y="1160" text-anchor="middle" class="small">self-link: doubly linked via prev and next</text>
+
+  <rect x="90" y="70" width="620" height="45" rx="8" fill="#dbeafe" stroke="#2563eb"/>
+  <text x="400" y="99" text-anchor="middle" class="note">FR mapping: visit/back/forward/showHistory | NFR memory: truncateForward</text>
+
+  <rect x="900" y="70" width="630" height="45" rx="8" fill="#dcfce7" stroke="#16a34a"/>
+  <text x="1215" y="99" text-anchor="middle" class="note">Conforms to: head, tail, current, size and full helper-method set</text>
+</svg>
