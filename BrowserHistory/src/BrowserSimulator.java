@@ -43,6 +43,12 @@ public class BrowserSimulator {
                 case "4":
                     history.showHistory();
                     break;
+                case "5":
+                    handleGenerateData();
+                    break;
+                case "6":
+                    handleRemovePage();
+                    break;
                 case "0":
                     return;
                 default:
@@ -57,6 +63,8 @@ public class BrowserSimulator {
         System.out.println("2. Back    - Go to previous page");
         System.out.println("3. Forward - Go to next page");
         System.out.println("4. History - View entire history");
+        System.out.println("5. Generate Data - Generate dummy history data");
+        System.out.println("6. Remove Page   - Remove a page from history by index");
         System.out.println("0. Exit    - Exit browser");
     }
 
@@ -96,5 +104,39 @@ public class BrowserSimulator {
         
         Node next = history.forward();
         System.out.println("=> Went forward to: " + next.getTitle());
+    }
+
+    private static void handleGenerateData() {
+        history.visit("google.com", "Google");
+        history.visit("youtube.com", "YouTube");
+        history.visit("stackoverflow.com", "StackOverflow");
+        history.visit("github.com", "GitHub");
+        history.visit("facebook.com", "Facebook");
+        history.visit("twitter.com", "Twitter");
+        history.visit("netflix.com", "Netflix");
+        history.visit("amazon.com", "Amazon");
+        history.visit("wikipedia.org", "Wikipedia");
+        history.visit("reddit.com", "Reddit");
+        System.out.println("=> Successfully generated 10 dummy pages.");
+    }
+
+    private static void handleRemovePage() {
+        if (history.isEmpty()) {
+            System.out.println("=> History is empty. Cannot remove page.");
+            return;
+        }
+        history.showHistory();
+        System.out.print("Enter the index of the page to remove (1-" + history.getSize() + "): ");
+        try {
+            int index = Integer.parseInt(scanner.nextLine());
+            boolean success = history.removePage(index);
+            if (success) {
+                System.out.println("=> Successfully removed page at index " + index);
+            } else {
+                System.out.println("=> Invalid index!");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("=> Invalid input. Please enter a valid number.");
+        }
     }
 }
