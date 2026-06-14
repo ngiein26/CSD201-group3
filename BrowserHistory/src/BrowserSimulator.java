@@ -27,7 +27,7 @@ public class BrowserSimulator {
             }
             
             displayMenu();
-            System.out.print("Select function (0-4): ");
+            System.out.print("Select function (0-6): ");
             String choice = scanner.nextLine();
             
             switch (choice) {
