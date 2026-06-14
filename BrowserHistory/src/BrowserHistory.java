@@ -155,6 +155,43 @@ public class BrowserHistory {
         return head == null;
     }
 
+    public boolean removePage(int index) {
+        if (index < 1 || index > size) {
+            return false;
+        }
+
+        Node temp = head;
+        for (int i = 1; i < index; i++) {
+            temp = temp.next;
+        }
+
+        if (temp == head) {
+            head = head.next;
+            if (head != null) {
+                head.prev = null;
+            } else {
+                tail = null;
+            }
+        } else if (temp == tail) {
+            tail = tail.prev;
+            tail.next = null;
+        } else {
+            temp.prev.next = temp.next;
+            temp.next.prev = temp.prev;
+        }
+
+        if (temp == current) {
+            if (temp.prev != null) {
+                current = temp.prev;
+            } else {
+                current = temp.next;
+            }
+        }
+
+        size--;
+        return true;
+    }
+
     private void truncateForward() {
         Node temp = current.next;
         while (temp != null) {

@@ -44,12 +44,6 @@ public class BrowserSimulator {
                 case "4":
                     history.showHistory();
                     break;
-                case "5":
-                    handleGenerateDummyData();
-                    break;
-                case "6":
-                    handleSearchByTitle();
-                    break;
                 case "0":
                     return;
                 default:
@@ -60,13 +54,11 @@ public class BrowserSimulator {
 
     private static void displayMenu() {
         System.out.println("\n--- NAVIGATION MENU ---");
-        System.out.println("1. Visit          - Access a new webpage");
-        System.out.println("2. Back           - Go to previous page");
-        System.out.println("3. Forward        - Go to next page");
-        System.out.println("4. History        - View entire history");
-        System.out.println("5. Generate Data  - Auto-generate demo history pages");
-        System.out.println("6. Search Title   - Search pages by title keyword");
-        System.out.println("0. Exit           - Exit browser");
+        System.out.println("1. Visit   - Access a new webpage");
+        System.out.println("2. Back    - Go to previous page");
+        System.out.println("3. Forward - Go to next page");
+        System.out.println("4. History - View entire history");
+        System.out.println("0. Exit    - Exit browser");
     }
 
     private static void handleVisit() {
@@ -105,41 +97,5 @@ public class BrowserSimulator {
 
         Node next = history.forward();
         System.out.println("=> Went forward to: " + next.getTitle());
-    }
-
-    private static void handleGenerateDummyData() {
-        System.out.print("Enter number of dummy pages to generate: ");
-        String input = scanner.nextLine();
-        try {
-            int count = Integer.parseInt(input.trim());
-            if (count <= 0) {
-                System.out.println("Error: Number must be greater than zero.");
-                return;
-            }
-            history.generateDummyData(count);
-            System.out.println("=> Generated " + count + " dummy history entries.");
-        } catch (NumberFormatException e) {
-            System.out.println("Error: Please enter a valid integer.");
-        }
-    }
-
-    private static void handleSearchByTitle() {
-        System.out.print("Enter title keyword to search: ");
-        String keyword = scanner.nextLine();
-        if (keyword.trim().isEmpty()) {
-            System.out.println("Error: Search keyword cannot be empty.");
-            return;
-        }
-
-        var results = history.searchByTitle(keyword);
-        if (results.isEmpty()) {
-            System.out.println("=> No pages found matching: '" + keyword + "'");
-            return;
-        }
-
-        System.out.println("=> Search results for '" + keyword + "':");
-        for (int i = 0; i < results.size(); i++) {
-            System.out.println(" " + (i + 1) + ". " + results.get(i).toString());
-        }
     }
 }
