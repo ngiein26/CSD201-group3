@@ -1,3 +1,9 @@
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class BrowserHistory {
 
     private Node head;
@@ -13,8 +19,12 @@ public class BrowserHistory {
     }
 
     public void visit(String url, String title) {
-        Node newNode = new Node(url, title);
-        
+        visit(url, title, LocalDateTime.now());
+    }
+
+    public void visit(String url, String title, LocalDateTime timestamp) {
+        Node newNode = new Node(url, title, timestamp);
+
         if (head == null) {
             head = newNode;
             tail = newNode;
@@ -30,6 +40,61 @@ public class BrowserHistory {
             current = newNode;
         }
         size++;
+    }
+
+    public List<Node> searchByTitle(String keyword) {
+        List<Node> results = new ArrayList<>();
+        if (keyword == null || keyword.trim().isEmpty() || isEmpty()) {
+            return results;
+        }
+
+        String lowerKeyword = keyword.toLowerCase();
+        Node temp = head;
+        while (temp != null) {
+            if (temp.getTitle() != null && temp.getTitle().toLowerCase().contains(lowerKeyword)) {
+                results.add(temp);
+            }
+            temp = temp.next;
+        }
+        return results;
+    }
+
+    public void generateDummyData(int numberOfPages) {
+        if (numberOfPages <= 0) {
+            return;
+        }
+
+        String[] sampleUrls = {
+            "https://www.google.com",
+            "https://www.facebook.com",
+            "https://www.github.com",
+            "https://www.twitter.com",
+            "https://www.linkedin.com",
+            "https://www.reddit.com",
+            "https://www.youtube.com",
+            "https://www.wikipedia.org"
+        };
+
+        String[] sampleTitles = {
+            "Google Search",
+            "Facebook Home",
+            "GitHub Repository",
+            "Twitter Feed",
+            "LinkedIn Profile",
+            "Reddit Discussion",
+            "YouTube Video",
+            "Wikipedia Article"
+        };
+
+        Random random = new Random();
+        LocalDateTime startTime = LocalDateTime.now().minusSeconds(numberOfPages).withNano(0);
+        for (int i = 0; i < numberOfPages; i++) {
+            int index = random.nextInt(sampleUrls.length);
+            String url = sampleUrls[index];
+            String title = sampleTitles[index] + " #" + (i + 1);
+            LocalDateTime timestamp = startTime.plusSeconds(i + 1);
+            visit(url, title, timestamp);
+        }
     }
 
     public Node back() {
@@ -53,7 +118,7 @@ public class BrowserHistory {
             System.out.println("History is empty!");
             return;
         }
-        
+
         System.out.println("========== BROWSER HISTORY ==========");
         Node temp = head;
         int index = 1;
