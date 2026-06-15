@@ -59,8 +59,8 @@
   <text x="930" y="808" class="text">+ isEmpty(): boolean</text>
   <text x="930" y="845" class="text">- truncateForward(): void</text>
 
-  <line x1="780" y1="330" x2="900" y2="330" stroke="#1f2937" stroke-width="2.6" marker-end="url(#arrow)"/>
-  <text x="840" y="312" text-anchor="middle" class="small">uses</text>
+  <line x1="900" y1="330" x2="780" y2="330" stroke="#1f2937" stroke-width="2.6" marker-end="url(#arrow)"/>
+  <text x="840" y="312" text-anchor="middle" class="small">contains</text>
 
   <path d="M245 1040 C245 1120, 625 1120, 625 1040" fill="none" stroke="#1f2937" stroke-width="2" marker-end="url(#arrow)"/>
   <text x="435" y="1160" text-anchor="middle" class="small">self-link: doubly linked via prev and next</text>
