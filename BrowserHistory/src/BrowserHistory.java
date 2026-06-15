@@ -10,12 +10,14 @@ public class BrowserHistory {
     private Node tail;
     private Node current;
     private int size;
+    private int forwardCount;
 
     public BrowserHistory() {
         head = null;
         tail = null;
         current = null;
         size = 0;
+        forwardCount = 0;
     }
 
     public void visit(String url, String title) {
@@ -40,6 +42,7 @@ public class BrowserHistory {
             current = newNode;
         }
         size++;
+        forwardCount = 0;
     }
 
     public List<Node> searchByTitle(String keyword) {
@@ -102,6 +105,7 @@ public class BrowserHistory {
             return null;
         }
         current = current.prev;
+        forwardCount++;
         return current;
     }
 
@@ -110,6 +114,7 @@ public class BrowserHistory {
             return null;
         }
         current = current.next;
+        forwardCount--;
         return current;
     }
 
@@ -188,20 +193,35 @@ public class BrowserHistory {
             }
         }
 
+        forwardCount = countForwardNodes(current);
+
         size--;
         return true;
     }
 
     private void truncateForward() {
-        Node temp = current.next;
-        while (temp != null) {
-            Node nextNode = temp.next;
-            temp.prev = null;
-            temp.next = null;
-            temp = nextNode;
-            size--;
+        if (current.next == null) {
+            return;
         }
+
+        current.next.prev = null;
         current.next = null;
         tail = current;
+        size -= forwardCount;
+        forwardCount = 0;
+    }
+
+    private int countForwardNodes(Node node) {
+        int count = 0;
+        if (node == null) {
+            return 0;
+        }
+
+        Node temp = node.next;
+        while (temp != null) {
+            count++;
+            temp = temp.next;
+        }
+        return count;
     }
 }
