@@ -64,10 +64,4 @@
 
   <path d="M245 1040 C245 1120, 625 1120, 625 1040" fill="none" stroke="#1f2937" stroke-width="2" marker-end="url(#arrow)"/>
   <text x="435" y="1160" text-anchor="middle" class="small">self-link: doubly linked via prev and next</text>
-
-  <rect x="90" y="70" width="620" height="45" rx="8" fill="#dbeafe" stroke="#2563eb"/>
-  <text x="400" y="99" text-anchor="middle" class="note">FR mapping: visit/back/forward/showHistory | NFR memory: truncateForward</text>
-
-  <rect x="900" y="70" width="630" height="45" rx="8" fill="#dcfce7" stroke="#16a34a"/>
-  <text x="1215" y="99" text-anchor="middle" class="note">Conforms to: head, tail, current, size and full helper-method set</text>
 </svg>
