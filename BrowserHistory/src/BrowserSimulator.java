@@ -1,4 +1,5 @@
 
+import java.util.List;
 import java.util.Scanner;
 
 public class BrowserSimulator {
@@ -131,7 +132,7 @@ public class BrowserSimulator {
             return;
         }
 
-        var results = history.searchByTitle(keyword);
+        List<Node> results = history.searchByTitle(keyword);
         if (results.isEmpty()) {
             System.out.println("=> No pages found matching: '" + keyword + "'");
             return;
