@@ -1,4 +1,7 @@
+<<<<<<< Updated upstream
 g
+=======
+>>>>>>> Stashed changes
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,41 +65,23 @@ public class BrowserHistory {
         return results;
     }
 
-    public void generateDummyData(int numberOfPages) {
-        if (numberOfPages <= 0) {
-            return;
-        }
-
-        String[] sampleUrls = {
-            "https://www.google.com",
-            "https://www.facebook.com",
-            "https://www.github.com",
-            "https://www.twitter.com",
-            "https://www.linkedin.com",
-            "https://www.reddit.com",
-            "https://www.youtube.com",
-            "https://www.wikipedia.org"
-        };
-
-        String[] sampleTitles = {
-            "Google Search",
-            "Facebook Home",
-            "GitHub Repository",
-            "Twitter Feed",
-            "LinkedIn Profile",
-            "Reddit Discussion",
-            "YouTube Video",
-            "Wikipedia Article"
-        };
-
-        Random random = new Random();
-        LocalDateTime startTime = LocalDateTime.now().minusSeconds(numberOfPages).withNano(0);
-        for (int i = 0; i < numberOfPages; i++) {
-            int index = random.nextInt(sampleUrls.length);
-            String url = sampleUrls[index];
-            String title = sampleTitles[index] + " #" + (i + 1);
-            LocalDateTime timestamp = startTime.plusSeconds(i + 1);
-            visit(url, title, timestamp);
+    public void loadFromCSV(String filename) {
+        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(filename))) {
+            String line = br.readLine(); // skip header
+            int loaded = 0;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 3) {
+                    String url = parts[0];
+                    String title = parts[1];
+                    java.time.LocalDateTime timestamp = java.time.LocalDateTime.parse(parts[2]);
+                    visit(url, title, timestamp);
+                    loaded++;
+                }
+            }
+            System.out.println("=> Successfully loaded " + loaded + " history records from " + filename);
+        } catch (Exception e) {
+            System.out.println("Error loading from CSV: " + e.getMessage());
         }
     }
 
