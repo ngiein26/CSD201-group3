@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-g
-=======
->>>>>>> Stashed changes
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
