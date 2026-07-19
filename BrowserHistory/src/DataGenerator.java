@@ -6,7 +6,7 @@ import java.util.Random;
 public class DataGenerator {
     public static void main(String[] args) {
         String csvFile = "sample_data.csv";
-        int numberOfPages = 2000;
+        int numberOfPages = 10000;
 
         String[] sampleUrls = {
             "https://www.google.com",

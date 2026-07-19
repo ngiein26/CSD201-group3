@@ -64,14 +64,14 @@ public class BrowserSimulator {
 
     private static void displayMenu() {
         System.out.println("\n--- NAVIGATION MENU ---");
-        System.out.println("1. Visit          - Access a new webpage");
-        System.out.println("2. Back           - Go to previous page");
-        System.out.println("3. Forward        - Go to next page");
-        System.out.println("4. History        - View entire history");
-        System.out.println("5. Search Title   - Search pages by title keyword");
-        System.out.println("6. LRU Experiment - Run the O(1) LRU Cache experiment");
-        System.out.println("7. Load Samples   - Generate & load 2000 sample histories");
-        System.out.println("0. Exit           - Exit browser");
+        System.out.println("1. Visit");
+        System.out.println("2. Back");
+        System.out.println("3. Forward");
+        System.out.println("4. History");
+        System.out.println("5. Search Title");
+        System.out.println("6. LRU Experiment");
+        System.out.println("7. Load Samples");
+        System.out.println("0. Exit");
     }
 
     private static void handleVisit() {
