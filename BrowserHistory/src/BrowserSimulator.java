@@ -29,7 +29,7 @@ public class BrowserSimulator {
             }
 
             displayMenu();
-            System.out.print("Select function (0-6): ");
+            System.out.print("Select function (0-7): ");
             String choice = scanner.nextLine();
 
             switch (choice) {
@@ -46,10 +46,13 @@ public class BrowserSimulator {
                     history.showHistory();
                     break;
                 case "5":
-                    handleGenerateDummyData();
+                    handleSearchByTitle();
                     break;
                 case "6":
-                    handleSearchByTitle();
+                    ExperimentRunner.main(null);
+                    break;
+                case "7":
+                    handleLoadSampleData();
                     break;
                 case "0":
                     return;
@@ -61,13 +64,14 @@ public class BrowserSimulator {
 
     private static void displayMenu() {
         System.out.println("\n--- NAVIGATION MENU ---");
-        System.out.println("1. Visit          - Access a new webpage");
-        System.out.println("2. Back           - Go to previous page");
-        System.out.println("3. Forward        - Go to next page");
-        System.out.println("4. History        - View entire history");
-        System.out.println("5. Generate Data  - Auto-generate demo history pages");
-        System.out.println("6. Search Title   - Search pages by title keyword");
-        System.out.println("0. Exit           - Exit browser");
+        System.out.println("1. Visit");
+        System.out.println("2. Back");
+        System.out.println("3. Forward");
+        System.out.println("4. History");
+        System.out.println("5. Search Title");
+        System.out.println("6. LRU Experiment");
+        System.out.println("7. Load Samples");
+        System.out.println("0. Exit");
     }
 
     private static void handleVisit() {
@@ -108,21 +112,6 @@ public class BrowserSimulator {
         System.out.println("=> Went forward to: " + next.getTitle());
     }
 
-    private static void handleGenerateDummyData() {
-        System.out.print("Enter number of dummy pages to generate: ");
-        String input = scanner.nextLine();
-        try {
-            int count = Integer.parseInt(input.trim());
-            if (count <= 0) {
-                System.out.println("Error: Number must be greater than zero.");
-                return;
-            }
-            history.generateDummyData(count);
-            System.out.println("=> Generated " + count + " dummy history entries.");
-        } catch (NumberFormatException e) {
-            System.out.println("Error: Please enter a valid integer.");
-        }
-    }
 
     private static void handleSearchByTitle() {
         System.out.print("Enter title keyword to search: ");
@@ -142,5 +131,12 @@ public class BrowserSimulator {
         for (int i = 0; i < results.size(); i++) {
             System.out.println(" " + (i + 1) + ". " + results.get(i).toString());
         }
+    }
+
+    private static void handleLoadSampleData() {
+        System.out.println("Generating 2000 sample web history records...");
+        DataGenerator.main(new String[]{});
+        System.out.println("Loading sample data into history...");
+        history.loadFromCSV("sample_data.csv");
     }
 }
