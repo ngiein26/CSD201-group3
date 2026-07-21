@@ -134,7 +134,7 @@ public class BrowserSimulator {
     }
 
     private static void handleLoadSampleData() {
-        System.out.println("Generating 2000 sample web history records...");
+        System.out.println("Generating sample web history records...");
         DataGenerator.main(new String[]{});
         System.out.println("Loading sample data into history...");
         history.loadFromCSV("sample_data.csv");
